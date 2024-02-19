@@ -210,5 +210,16 @@ app.get('/uzlet', (req, res) => {
     connection.end()
   })
     
+  app.get('/diagram2', (req, res) => {
+    kapcsolat()
+    connection.query('SELECT COUNT(etelek.etelek_nev) AS etelek_szama, eteltipusok.eteltipusok_nev FROM etelek INNER JOIN eteltipusok ON etelek.etelek_id = eteltipusok.eteltipusok_id GROUP BY eteltipusok.eteltipusok_nev;', function (err, rows, fields) {
+      if (err) throw err
+      console.log(rows)
+      res.send(rows)
+    })
+    
+    connection.end()
+  })
+
 
 };
