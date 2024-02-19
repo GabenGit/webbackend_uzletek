@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2024. Feb 19. 09:58
--- Kiszolgáló verziója: 10.4.32-MariaDB
--- PHP verzió: 8.2.12
+-- Létrehozás ideje: 2024. Feb 19. 10:44
+-- Kiszolgáló verziója: 10.4.28-MariaDB
+-- PHP verzió: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,10 +18,10 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Adatbázis: `web_zarodoga`
+-- Adatbázis: `webreceptek`
 --
-CREATE DATABASE IF NOT EXISTS `web_gabor` DEFAULT CHARACTER SET utf8 COLLATE utf8_hungarian_ci;
-USE `web_gabor`;
+CREATE DATABASE IF NOT EXISTS `webreceptek` DEFAULT CHARACTER SET utf8 COLLATE utf8_hungarian_ci;
+USE `webreceptek`;
 
 -- --------------------------------------------------------
 
@@ -255,29 +255,30 @@ INSERT INTO `roles` (`id`, `name`, `createdAt`, `updatedAt`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `szavazat`
+-- Tábla szerkezet ehhez a táblához `szavazat_etel`
 --
 
-CREATE TABLE `szavazat` (
+CREATE TABLE `szavazat_etel` (
   `szavazat_id` int(11) NOT NULL,
-  `szavazat_film` int(11) NOT NULL
+  `szavazat_szam` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
--- A tábla adatainak kiíratása `szavazat`
+-- A tábla adatainak kiíratása `szavazat_etel`
 --
 
-INSERT INTO `szavazat` (`szavazat_id`, `szavazat_film`) VALUES
+INSERT INTO `szavazat_etel` (`szavazat_id`, `szavazat_szam`) VALUES
 (1, 1),
 (2, 2),
 (3, 1),
-(4, 1),
+(4, 30),
 (5, 1),
 (6, 1),
 (7, 2),
 (8, 1),
 (9, 1),
-(10, 3);
+(10, 3),
+(11, 10);
 
 -- --------------------------------------------------------
 
@@ -302,7 +303,8 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`, `createdAt`, `update
 (1, 'user', 'user', '$2a$08$gXM4pyuhZFlC72PeAwxrUOR0uA31/d2PdgnHP35JGV.0bQNiZBatS', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (2, 'mod', 'mod', '$2a$08$gXM4pyuhZFlC72PeAwxrUOR0uA31/d2PdgnHP35JGV.0bQNiZBatS', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (3, 'admin', 'admin', '$2a$08$97Ze1/hXfOX44WdC62Rq8uRkog9HYC1HukRX8eld2ZEKPyenM5v.G', '2020-08-02 15:03:59', '2020-08-02 15:03:59'),
-(14, 'valaki', 'valaki@gmail.com', '$2a$08$2I9RHv7Yt6ljopICRKZq9.c/PzU.jDQU2zqtSD16A3kjQjbBuhw1a', '2024-02-06 17:37:10', '2024-02-06 17:37:10');
+(14, 'valaki', 'valaki@gmail.com', '$2a$08$2I9RHv7Yt6ljopICRKZq9.c/PzU.jDQU2zqtSD16A3kjQjbBuhw1a', '2024-02-06 17:37:10', '2024-02-06 17:37:10'),
+(15, 'asdasd', 'asd@gmail.com', '$2a$08$ZFsgD.G8iZNufZ/jq8vS5eoAUsXAToYFAqw96JUSkTen9L.LlrfSq', '2024-02-07 11:24:18', '2024-02-07 11:24:18');
 
 -- --------------------------------------------------------
 
@@ -325,6 +327,7 @@ INSERT INTO `user_roles` (`createdAt`, `updatedAt`, `roleId`, `userId`) VALUES
 ('0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, 1),
 ('2020-08-02 15:04:00', '2020-08-02 15:04:00', 1, 3),
 ('2024-02-06 17:37:10', '2024-02-06 17:37:10', 1, 14),
+('2024-02-07 11:24:18', '2024-02-07 11:24:18', 1, 15),
 ('0000-00-00 00:00:00', '0000-00-00 00:00:00', 2, 2),
 ('0000-00-00 00:00:00', '0000-00-00 00:00:00', 2, 3),
 ('2020-08-02 15:04:00', '2020-08-02 15:04:00', 3, 3);
@@ -465,9 +468,9 @@ ALTER TABLE `roles`
   ADD PRIMARY KEY (`id`);
 
 --
--- A tábla indexei `szavazat`
+-- A tábla indexei `szavazat_etel`
 --
-ALTER TABLE `szavazat`
+ALTER TABLE `szavazat_etel`
   ADD PRIMARY KEY (`szavazat_id`);
 
 --
@@ -510,13 +513,13 @@ ALTER TABLE `varos`
 -- AUTO_INCREMENT a táblához `etelek`
 --
 ALTER TABLE `etelek`
-  MODIFY `etelek_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
+  MODIFY `etelek_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
 
 --
 -- AUTO_INCREMENT a táblához `eteltipusok`
 --
 ALTER TABLE `eteltipusok`
-  MODIFY `eteltipusok_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `eteltipusok_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT a táblához `film`
@@ -525,22 +528,22 @@ ALTER TABLE `film`
   MODIFY `film_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
--- AUTO_INCREMENT a táblához `szavazat`
+-- AUTO_INCREMENT a táblához `szavazat_etel`
 --
-ALTER TABLE `szavazat`
-  MODIFY `szavazat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+ALTER TABLE `szavazat_etel`
+  MODIFY `szavazat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT a táblához `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT a táblához `uzlet`
 --
 ALTER TABLE `uzlet`
-  MODIFY `uzlet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `uzlet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT a táblához `uzlettipus`

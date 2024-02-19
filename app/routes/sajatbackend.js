@@ -19,7 +19,7 @@ module.exports = function(app) {
       host: 'localhost',
       user: 'root',
       password: '',
-      database: 'web_zarodoga'
+      database: 'webreceptek'
     })
     
     connection.connect()
@@ -38,7 +38,7 @@ module.exports = function(app) {
     connection.end()
   })
 
-  app.get('/diagram', (req, res) => {
+  app.get('/diagram_gabor', (req, res) => {
     kapcsolat()
     connection.query('SELECT film.film_cim, COUNT(*) AS darabszam FROM szavazat INNER JOIN film ON film.film_id = szavazat.szavazat_film GROUP BY film_id;', function (err, rows, fields) {
       if (err) throw err
@@ -137,5 +137,78 @@ app.get('/uzlet', (req, res) => {
     connection.end() 
     })
 
+
+
+//----------------------------Tibi-------------------------//
+    app.get('/etelek', (req, res) => {
+      kapcsolat()
+    
+      connection.query('SELECT * FROM etelek', (err, rows, fields) => {
+      if (err) throw err
+    
+      console.log(rows)
+      res.send(rows)
+    })
+    
+    connection.end()
+    })
+  
+  
+    app.get('/eteltipusok', (req, res) => {
+      kapcsolat()
+    
+      connection.query('SELECT * FROM eteltipusok', (err, rows, fields) => {
+      if (err) throw err
+    
+      console.log(rows)
+      res.send(rows)
+  })
+    
+    connection.end()
+  })
+  
+  
+  /*SELECT film.film_cim, COUNT(*) as darabszam FROM szavazat INNER JOIN film ON film.film_id=szavazat.szavazat_film GROUP BY film_id;*/
+  app.get('/diagram', (req, res) => {
+    kapcsolat()
+    connection.query('SELECT etelek_nev, COUNT(*) darabszam FROM etelek INNER JOIN szavazat_etel ON szavazat_etel.szavazat_szam=etelek.etelek_id GROUP BY etelek_id', function (err, rows, fields) {
+      if (err) throw err
+      console.log(rows)
+      res.send(rows)
+    })
+    
+    connection.end()
+  })
+    
+  app.delete('/torlesetelek', (req, res) => {
+    kapcsolat()
+    connection.query(`DELETE FROM etelek WHERE etelek_id=${req.body.bevitel1};`, function (err, rows, fields) {
+      if (err) {
+        console.log("Hiba!")
+        res.send("Hiba!")
+      }
+      else {
+      console.log("A törlés sikerült!")
+      res.send("A törlés sikerült!")
+    }
+    })
+    connection.end()
+  })
+  
+  app.delete('/torleseteltipusok', (req, res) => {
+    kapcsolat()
+    connection.query(`DELETE FROM eteltipusok WHERE eteltipusok_id=${req.body.bevitel1};`, function (err, rows, fields) {
+      if (err) {
+        console.log("Hiba!")
+        res.send("Hiba!")
+      }
+      else {
+      console.log("A törlés sikerült!")
+      res.send("A törlés sikerült!")
+    }
+    })
+    connection.end()
+  })
+    
 
 };
