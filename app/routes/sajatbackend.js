@@ -38,6 +38,30 @@ module.exports = function(app) {
     connection.end()
   })
 
+  app.get('/uzlettipus', (req, res) => {
+    
+    kapcsolat()
+    connection.query('SELECT * FROM uzlettipus', (err, rows, fields) => {
+      if (err) throw err
+    
+      console.log(rows)
+      res.send(rows)
+    })
+    connection.end() 
+    })
+
+    app.post('/keresuzlet', (req, res) => {
+      kapcsolat()
+      
+      connection.query(`SELECT * FROM uzlet INNER JOIN varos ON uzlet.varosok_id = varos.varos_id WHERE uzlettipus = ${req.body.bevitel1}`, (err, rows, fields) => {
+      if (err) throw err
+      
+      console.log(rows)
+      res.send(rows)
+      })
+      connection.end() 
+      })
+
   app.get('/diagram_gabor', (req, res) => {
     kapcsolat()
     connection.query('SELECT film.film_cim, COUNT(*) AS darabszam FROM szavazat INNER JOIN film ON film.film_id = szavazat.szavazat_film GROUP BY film_id;', function (err, rows, fields) {
