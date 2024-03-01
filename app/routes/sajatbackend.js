@@ -246,6 +246,8 @@ app.get('/uzlet', (req, res) => {
   })
 
   
+  
+  
 
 
 };
