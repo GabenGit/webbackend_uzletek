@@ -245,6 +245,45 @@ app.get('/uzlet', (req, res) => {
     connection.end()
   })
 
+  //Erik
+
+  app.post('/keresetterem', (req, res) => {
+    kapcsolat()
+   
+    connection.query(`SELECT * FROM uzlet WHERE uzlet_nev like "%${req.body.bevitel1}%"`, (err, rows, fields) => {
+    if (err) throw err
+   
+    console.log(rows)
+    res.send(rows)
+    })
+    connection.end()
+    })
+   
+app.delete('/torles_komment', (req, res) => {
+    kapcsolat()    
+     let parancs="delete from kommentek where komment_id="+req.body.bevitel1
+     connection.query(parancs, function (err, rows, fields) {
+       if (err)
+           console.log(err)
+       else
+        res.send("Sikeres törlés!")
+     })
+     
+     connection.end()
+  })
+
+
+  app.get('/kommentek', (req, res) => {
+    kapcsolat()
+    connection.query('SELECT * from kommentek', function (err, rows, fields) {
+      if (err) throw err
+      console.log(rows)
+      res.send(rows)
+    })
+   
+    connection.end()
+  })
+
   
   
   
